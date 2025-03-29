@@ -1,0 +1,93 @@
+/* PostList.css - Estilos para el componente PostList */
+.post-list {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.post-list h2 {
+  color: #212529;
+  margin-bottom: 20px;
+}
+
+.post-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e9ecef;
+}
+
+.post-category {
+  display: inline-block;
+  background-color: #0d6efd;
+  color: white;
+  font-size: 0.8rem;
+  padding: 3px 10px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.post-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.post-title a {
+  color: #212529;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.post-title a:hover {
+  color: #0d6efd;
+}
+
+.post-excerpt {
+  color: #495057;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+
+.post-meta span {
+  margin-right: 15px;
+}
+
+.read-more {
+  display: inline-block;
+  background-color: #0d6efd;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.read-more:hover {
+  background-color: #0b5ed7;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  .post-list {
+    padding: 15px;
+  }
+  
+  .post-meta {
+    flex-direction: column;
+  }
+  
+  .post-meta span {
+    margin-bottom: 5px;
+  }
+}

@@ -1,0 +1,66 @@
+/* Footer.css - Estilos para el componente Footer */
+.footer {
+  background-color: #f8f9fa; /* Gris muy claro, casi blanco */
+  color: #495057; /* Gris oscuro para el texto */
+  padding: 1rem 0;
+  margin-top: 2rem;
+  border-top: 1px solid #e9ecef; /* Borde sutil */
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.developer-credit {
+  font-style: italic;
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #6c757d; /* Gris medio */
+}
+
+.footer-links {
+  display: flex;
+}
+
+.footer-links a {
+  color: #495057; /* Gris oscuro */
+  margin-left: 20px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+  color: #0d6efd; /* Azul para hover */
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .footer-links {
+    margin-top: 10px;
+    justify-content: center;
+  }
+  
+  .footer-links a {
+    margin: 0 10px;
+  }
+}

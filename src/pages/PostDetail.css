@@ -1,0 +1,31 @@
+/* Solo las partes que cambian de colores en PostDetail.css */
+.post-category {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.post-not-found h2 {
+  color: #212529;
+}
+
+.back-button {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.back-button:hover {
+  background-color: #0b5ed7;
+}
+
+.submit-comment {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.submit-comment:hover {
+  background-color: #0b5ed7;
+}
+
+.back-link {
+  color: #0d6efd;
+}
