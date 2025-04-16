@@ -1,71 +1,64 @@
-// PostDetail.js - Página para ver un post individual y sus comentarios
-import React, { useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+// PostDetail.js - Componente para ver un post y sus comentarios
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import './PostDetail.css';
 
-function PostDetail({ posts, addComment }) {
-  const { id } = useParams(); // Obtener el ID del post de la URL
-  const navigate = useNavigate();
-  
-  // Buscar el post por ID
-  const post = posts.find(p => p.id === parseInt(id));
-  
-  // Estado para el formulario de comentarios
-  const [commentData, setCommentData] = useState({
-    author: '',
-    text: ''
-  });
-  
-  // Si el post no existe, mostrar mensaje y opción para volver
+function PostDetail({ posts, addComment, addReplyToComment }) {
+  const { id } = useParams();
+  const [post, setPost] = useState(null);
+  const [comment, setComment] = useState({ text: '', author: '' });
+  const [replyingTo, setReplyingTo] = useState(null); // Guardar el comentario al que se responde
+
+  useEffect(() => {
+    // Encontrar el post correspondiente al ID de la URL
+    const currentPost = posts.find(p => p.id === parseInt(id));
+    setPost(currentPost);
+  }, [id, posts]);
+
   if (!post) {
-    return (
-      <div className="post-not-found">
-        <h2>Post no encontrado</h2>
-        <p>El post que estás buscando no existe o ha sido eliminado.</p>
-        <button onClick={() => navigate('/')} className="back-button">
-          Volver al inicio
-        </button>
-      </div>
-    );
+    return <div className="loading">Cargando...</div>;
   }
-  
-  // Manejar cambios en el formulario de comentarios
-  const handleCommentChange = (e) => {
-    const { name, value } = e.target;
-    setCommentData({
-      ...commentData,
-      [name]: value
-    });
-  };
-  
-  // Manejar envío del formulario de comentarios
-  const handleCommentSubmit = (e) => {
+
+  // Manejar el envío de un comentario o respuesta
+  const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Validar que se han completado los campos
-    if (!commentData.author.trim() || !commentData.text.trim()) {
+    if (comment.text.trim() === '' || comment.author.trim() === '') {
       alert('Por favor completa todos los campos');
       return;
     }
-    
-    // Añadir el comentario
-    addComment(post.id, commentData);
-    
-    // Limpiar el formulario
-    setCommentData({
-      author: '',
-      text: ''
-    });
+
+    // Si estamos respondiendo a un comentario específico
+    if (replyingTo) {
+      addReplyToComment(post.id, replyingTo.id, comment);
+      setComment({ text: '', author: '' });
+      setReplyingTo(null);
+    } else {
+      // Comentario normal al post
+      addComment(post.id, comment);
+      setComment({ text: '', author: '' });
+    }
   };
-  
+
+  // Iniciar respuesta a un comentario
+  const handleReply = (commentToReply) => {
+    setReplyingTo(commentToReply);
+    // Hacer scroll al formulario de comentario
+    document.getElementById('comment-form').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Cancelar respuesta
+  const handleCancelReply = () => {
+    setReplyingTo(null);
+  };
+
   return (
     <div className="post-detail">
       <div className="post-header">
         <span className="post-category">{post.category}</span>
         <h1>{post.title}</h1>
         <div className="post-meta">
-          <span>Por: {post.author}</span>
-          <span>Fecha: {post.date}</span>
+          Por: {post.author} | Fecha: {post.date}
         </div>
       </div>
       
@@ -74,64 +67,90 @@ function PostDetail({ posts, addComment }) {
       </div>
       
       <div className="comments-section">
-        <h3>Comentarios ({post.comments.length})</h3>
+        <h2>Comentarios ({post.comments.length})</h2>
         
-        {post.comments.length === 0 ? (
-          <p className="no-comments">No hay comentarios aún. ¡Sé el primero en comentar!</p>
-        ) : (
-          <div className="comments-list">
-            {post.comments.map(comment => (
-              <div className="comment" key={comment.id}>
-                <div className="comment-header">
-                  <span className="comment-author">{comment.author}</span>
-                  <span className="comment-date">{comment.date}</span>
-                </div>
-                <p className="comment-text">{comment.text}</p>
+        {post.comments.map(comment => (
+          <div className="comment" key={comment.id}>
+            <div className="comment-header">
+              <strong>{comment.author}</strong> <span className="comment-date">{comment.date}</span>
+            </div>
+            <p>{comment.text}</p>
+            <button 
+              className="reply-button" 
+              onClick={() => handleReply(comment)}
+            >
+              Responder
+            </button>
+            
+            {/* Mostrar respuestas si existen */}
+            {comment.replies && comment.replies.length > 0 && (
+              <div className="comment-replies">
+                {comment.replies.map(reply => (
+                  <div className="reply" key={reply.id}>
+                    <div className="reply-header">
+                      <strong>{reply.author}</strong> <span className="reply-date">{reply.date}</span>
+                    </div>
+                    <p>{reply.text}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
+          </div>
+        ))}
+      </div>
+      
+      <div className="add-comment">
+        <h3 id="comment-form">
+          {replyingTo 
+            ? `Responder a ${replyingTo.author}` 
+            : 'Añadir un comentario'}
+        </h3>
+        
+        {replyingTo && (
+          <div className="replying-to">
+            <p>
+              <em>Respondiendo a: "{replyingTo.text}"</em>
+              <button 
+                className="cancel-reply" 
+                onClick={handleCancelReply}
+              >
+                Cancelar
+              </button>
+            </p>
           </div>
         )}
         
-        <div className="add-comment">
-          <h4>Añadir un comentario</h4>
-          <form onSubmit={handleCommentSubmit}>
-            <div className="form-group">
-              <label htmlFor="author">Tu nombre:</label>
-              <input
-                type="text"
-                id="author"
-                name="author"
-                value={commentData.author}
-                onChange={handleCommentChange}
-                placeholder="Ej. Juan Pérez"
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="text">Tu comentario:</label>
-              <textarea
-                id="text"
-                name="text"
-                value={commentData.text}
-                onChange={handleCommentChange}
-                placeholder="Escribe tu comentario aquí..."
-                rows="4"
-                required
-              ></textarea>
-            </div>
-            
-            <button type="submit" className="submit-comment">
-              Publicar comentario
-            </button>
-          </form>
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Tu nombre:</label>
+            <input
+              type="text"
+              placeholder="Ej: Juan Pérez"
+              value={comment.author}
+              onChange={(e) => setComment({...comment, author: e.target.value})}
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Tu comentario:</label>
+            <textarea
+              placeholder="Escribe tu comentario aquí..."
+              value={comment.text}
+              onChange={(e) => setComment({...comment, text: e.target.value})}
+              required
+              rows="4"
+            ></textarea>
+          </div>
+          
+          <button type="submit" className="publish-button">
+            {replyingTo ? 'Publicar respuesta' : 'Publicar comentario'}
+          </button>
+        </form>
       </div>
       
-      <div className="post-actions">
-        <Link to="/" className="back-link">
-          ← Volver a la lista de posts
-        </Link>
+      <div className="back-link">
+        <Link to="/">← Volver a la lista de posts</Link>
       </div>
     </div>
   );

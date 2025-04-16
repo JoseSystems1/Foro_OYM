@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import PostDetail from './pages/PostDetail';
 import NewPost from './pages/NewPost';
+import About from './pages/About';
 
 function App() {
   // Estado para almacenar los posts (en una aplicación real, esto vendría de una base de datos)
@@ -18,10 +19,16 @@ function App() {
       title: 'Sugerencia para la biblioteca',
       content: 'Sería bueno tener más horarios disponibles en la biblioteca durante época de exámenes.',
       author: 'Carlos Mendez',
-      date: '2023-03-15',
+      date: '2025-03-29',
       category: 'Sugerencias',
       comments: [
-        { id: 1, text: 'Totalmente de acuerdo!', author: 'Ana Ruiz', date: '2023-03-16' }
+        { 
+          id: 1, 
+          text: 'Totalmente de acuerdo!', 
+          author: 'Ana Ruiz', 
+          date: '2025-03-29',
+          replies: [] 
+        }
       ]
     },
     {
@@ -29,7 +36,7 @@ function App() {
       title: 'Opinión sobre el profesor Martínez',
       content: 'El profesor Martínez de Matemáticas explica muy bien y siempre está disponible para consultas.',
       author: 'Laura Gómez',
-      date: '2023-03-10',
+      date: '2025-03-29',
       category: 'Profesores',
       comments: []
     }
@@ -51,11 +58,41 @@ function App() {
           id: post.comments.length + 1,
           text: comment.text,
           author: comment.author,
-          date: new Date().toISOString().slice(0, 10)
+          date: new Date().toISOString().slice(0, 10),
+          replies: [] // Agregamos un array para almacenar las respuestas
         };
         return {
           ...post,
           comments: [...post.comments, newComment]
+        };
+      }
+      return post;
+    });
+    setPosts(updatedPosts);
+  };
+
+  // Nueva función para añadir una respuesta a un comentario específico
+  const addReplyToComment = (postId, commentId, reply) => {
+    const updatedPosts = posts.map(post => {
+      if (post.id === postId) {
+        const updatedComments = post.comments.map(comment => {
+          if (comment.id === commentId) {
+            const newReply = {
+              id: comment.replies ? comment.replies.length + 1 : 1,
+              text: reply.text,
+              author: reply.author,
+              date: new Date().toISOString().slice(0, 10)
+            };
+            return {
+              ...comment,
+              replies: [...(comment.replies || []), newReply]
+            };
+          }
+          return comment;
+        });
+        return {
+          ...post,
+          comments: updatedComments
         };
       }
       return post;
@@ -72,11 +109,21 @@ function App() {
             <Route path="/" element={<Home posts={posts} />} />
             <Route 
               path="/post/:id" 
-              element={<PostDetail posts={posts} addComment={addComment} />} 
+              element={
+                <PostDetail 
+                  posts={posts} 
+                  addComment={addComment} 
+                  addReplyToComment={addReplyToComment}
+                />
+              } 
             />
             <Route 
               path="/new-post" 
               element={<NewPost addPost={addPost} />} 
+            />
+            <Route 
+              path="/about" 
+              element={<About />} 
             />
           </Routes>
         </div>

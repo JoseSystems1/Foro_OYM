@@ -1,21 +1,21 @@
-// Header.js - Cabecera de nuestra aplicación
+
+// Header.js - Componente de cabecera para todas las páginas
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Header.css'; // Archivo de estilos
+import './Header.css';
 
 function Header() {
   return (
     <header className="header">
       <div className="header-container">
         <div className="logo">
-          <Link to="/">
-            <h1>Foro Universidad OyM</h1>
-          </Link>
+          <Link to="/">Foro Universidad OyM</Link>
         </div>
-        <nav className="main-nav">
+        <nav className="nav">
           <ul>
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/new-post">Nuevo Post</Link></li>
+            <li><Link to="/about">Acerca de</Link></li>
           </ul>
         </nav>
       </div>

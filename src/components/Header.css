@@ -1,69 +1,65 @@
-/* Header.css - Estilos para el componente Header */
+/* Header.css - Estilos para el encabezado */
+
 .header {
-  background-color: #f8f9fa; /* Gris muy claro, casi blanco */
-  color: #495057; /* Gris oscuro para el texto */
-  padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombra sutil */
+  background-color: #003366;
+  color: white;
+  padding: 15px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo a {
-  text-decoration: none;
-  color: #495057;
-}
-
-.logo h1 {
-  margin: 0;
+  color: white;
   font-size: 1.5rem;
-  color: #212529; /* Casi negro para mejor contraste */
+  font-weight: bold;
+  text-decoration: none;
 }
 
-.main-nav ul {
+.nav ul {
   display: flex;
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
-.main-nav li {
+.nav li {
   margin-left: 20px;
 }
 
-.main-nav a {
-  color: #495057;
+.nav a {
+  color: white;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
 }
 
-.main-nav a:hover {
-  color: #0d6efd; /* Azul para hover */
+.nav a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Estilos para dispositivos móviles */
-@media (max-width: 768px) {
+/* Responsive */
+@media (max-width: 600px) {
   .header-container {
     flex-direction: column;
     text-align: center;
   }
   
-  .main-nav {
-    margin-top: 10px;
+  .logo {
+    margin-bottom: 10px;
   }
   
-  .main-nav ul {
+  .nav ul {
     justify-content: center;
   }
   
-  .main-nav li {
+  .nav li {
     margin: 0 10px;
   }
 }
